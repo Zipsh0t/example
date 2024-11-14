@@ -1,0 +1,19 @@
+Notes for the process of making a website in Python Flask
+
+- Create react app
+- Add backend folder
+- Start with app.py intialization
+- models.py intialization - build models
+- populate env.py
+- complete seed file
+- add necessary requirements
+- python -m venv venv
+- venv/scripts/activate
+- pip install -r requirements.txt
+- add "*/venv", "*.log", "*/__pychache__", and "*/instance" to gitignore
+- add app.py (meaning application.python) 
+- add env.py (meaning evinroment.python)  
+- add models.py (meaning models.python)
+- add seed.py (meaning ???)
+- util.py (meaning utilities.python)
+- For frontend npm install react-router-dom
