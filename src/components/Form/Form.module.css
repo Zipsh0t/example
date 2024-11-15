@@ -1,0 +1,23 @@
+.alignedForm {
+    flex-direction: column;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 600;
+}
+
+.formFieldContainer {
+    display: flex;
+}
+
+.labelDiv {
+    flex: 1;
+    display: flex;
+    margin-right: 10px;
+    margin-top: 8px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.inputDiv {
+    flex: 1.6;
+}

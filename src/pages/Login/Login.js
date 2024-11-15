@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
 import GeneralButton from '../../components/GeneralButton/GeneralButton';
 import LoginDTO from '../../dtos/loginDTO/loginDTO';
-import NetworkRequest from '../../lib/networkRequest';
-import { JSON_HEADER, LOGIN_EXT, POST } from '../../lib/networkRequestConstants';
+import styles from './Login.module.css';
+import FormField from '../../components/Form/FormField';
+import Form from '../../components/Form/Form';
+import { useAuth } from '../../contexts/authContext';
+import { useNavigate } from 'react-router-dom';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+
+
 
 function Login () {
-    const [loginDTO, setLoginDTO] = useState(new LoginDTO())
+    const [loginDTO, setLoginDTO] = useState(new LoginDTO());
+    const [loading, setLoading] = useState(false);
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
-    const login = async () => {
-        try {
-            const data = await NetworkRequest(LOGIN_EXT, POST, JSON_HEADER, loginDTO.jsonify())
-            alert(data.token);
-        }  catch (error) {
-            alert(error.message);
-           } 
-        }
-
-    
-    
     const handleChange = (field) => (e) => {
         setLoginDTO(prev => {
             const newLoginDTO = Object.create(Object.getPrototypeOf(prev));
@@ -27,33 +25,48 @@ function Login () {
         })
     }
 
+    const attemptLogin = async () => {
+        setLoading(true);
+        const response = await login(loginDTO);
+        if (response) {
+            navigate('/admin/home');
+        }
+        setLoading(false);
+    }
+
+
     const fields = [
         { value: loginDTO.username, name: "username", placeholder: "Username" },
-        { value: loginDTO.password, name: "password", placeholder: "Password" }
+        { value: loginDTO.password, type: 'password', name: "password", placeholder: "Password" }
     ]
-
 
     return (
         <div>
-            <h1>Login</h1>
-            
-            {fields.map(field => (
-                <input
-                    key={field.name}
-                    type="text"
-                    value={field.value}
-                    onChange={handleChange(field.name)}
-                    placeholder={field.placeholder}
-                />
-            ))}
+            { loading ? 
+            <LoadingScreen />
+            :  
+            <div>
+                <h1>Login</h1>
 
+                <Form onSubmit={attemptLogin}>
+                    {fields.map(field => (
+                        <FormField
+                            key={field.name}
+                            type={field.type}
+                            text={field.placeholder}
+                            value={field.value}
+                            onChange={handleChange(field.name)}
+                            placeholder={field.placeholder}
+                        />
+                    ))}
 
-
-        <GeneralButton 
-            onClick={login}
-            text="Login"
-        />
-        
+                    <GeneralButton 
+                        type="submit"
+                        text="Login"
+                    />
+                </Form>
+            </div>
+            }
         </div>
     )
 }
